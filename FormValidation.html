@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+        input{
+            display: block;
+            margin: 20px auto;
+            height: 40px;
+            width: 300px;
+            font-size: 20px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            padding: 20px;
+            transition: 0.3s;
+        }
+        input:focus{
+            height: 45px;
+            width: 350px;
+            transition: 0.3s;
+        }
+        input::placeholder{
+            font-size: 17px;
+        }
+        form{
+            margin: 100px auto;
+            background-color: rgb(174, 240, 218);
+            width: 500px;
+            height: auto;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.422);
+        }
+        span{
+            display: none;
+            font-size: 15px;
+            color: red;
+            margin: auto;
+            width: 90%;
+            text-align: center;
+        }
+        button{
+            margin:0% 40%;
+            background-color: rgba(218, 30, 30, 0.966);
+            color: white;
+            font-size: 20px;
+            padding:5px 20px;
+            border-radius: 10px;
+        }
+
+    </style>
+</head>
+<body> 
+    <form action="./ResponsePage.html" onsubmit="return handleSubmit()"> 
+        <input type="text" placeholder="Username" id="uname" required>
+        <span>*Please enter username between 8-16 Char & Dont include number or any special character</span>
+
+        <input type="text" placeholder="Email" id="email" required>
+        <span>*Please enter a valid Email</span>
+
+        <input type="text" placeholder="Password" id="upass" required>
+        <span>*Please enter atleast one uppercase , lower , 0-9 and any special char </span>
+
+        <input type="password" placeholder="Confirm Password" id="uconfirmpass" required>
+        <span>*Password Mismatch</span>
+
+        <input type="date" placeholder="" id="dob">
+        <span>*Please enter valid Date of Birth</span>
+
+        <button type="submit" value="Login">LOGIN</button>
+    </form>
+
+    <script>
+
+        let reset = ()=>{
+            inp1.nextElementSibling.style.display = "none"
+            inp2.nextElementSibling.style.display = "none"
+            inp3.nextElementSibling.style.display = "none"
+            inp4.nextElementSibling.style.display = "none"
+            inp5.nextElementSibling.style.display = "none"
+        }
+       function handleSubmit()
+       {
+        let inp1 = document.getElementById("uname");
+        let inp2 = document.getElementById("email");
+        let inp3 = document.getElementById("upass");
+        let inp4 = document.getElementById("uconfirmpass");
+        let inp5 = document.getElementById("dob");
+
+        let str = inp1.value;
+
+        let result = true; // initially assuming all the inputs are valid
+        
+        // TO verify the presence of alphabets :
+        for(let i=0 ; i<inp1.value.length ; i++)
+        {
+            let code  = inp1.value.charCodeAt(i);
+            if(!((code>64 && code<91) || (code>96 && code<123)))
+            {
+                result = false;
+                inp1.nextElementSibling.style.display = "block";
+            }
+        }
+
+        // To Verify the number of characters :
+        if(inp1.value.length<8 || inp1.value.length>16){
+                result = false;
+                inp1.nextElementSibling.style.display = "block";
+            }
+
+        // To validate the email Format :
+        let mail = inp2.value;
+        if(mail.includes('@') == false || mail.endsWith('@') == true || mail.startsWith('@') == true)
+        {
+            result = false;
+            inp2.nextElementSibling.style.display = "block";
+        }
+
+        // TO validate the password (1 uppercase, 1 lower case, 1 special character, 1 digit, length 8-16 )
+        let pass = inp3.value;
+        let lower = 0,upper = 0,digit = 0,special = 0;
+
+        for(let i=0 ; i<inp3.value.length ; i++)
+        {
+            let code = inp3.value.charCodeAt(i);
+            if(code>=65 && code<=90) // UPPER case
+            {
+                upper++;
+            }
+            else if(code>=97 && code<=122)
+            {
+                lower++;   
+            }
+            else if(code>47 && code<58)
+            {
+                digit++;
+            }
+            else if((code >= 32 && code <= 47) || (code >= 58 && code <= 64) || (code >= 91 && code <= 96) || (code >= 123 && code <= 126)){
+                special++;
+            }
+        }
+
+        if(upper<1 || lower<1 || digit<1 || special<1 || pass.length<8 || pass.length>16)
+        {
+            result = false;
+            inp3.nextElementSibling.style.display = "block";
+        }
+       
+        // To Validate Confirm password
+        if(inp4.value != inp3.value)
+        {
+            result = false;
+            inp4.nextElementSibling.style.display = "block";
+        }
+
+        // To validate age should be 8 and Above
+        let date = new Date(inp5.value)
+        if(date.getFullYear() >= 2015)
+        {
+            result = false;
+            inp5.nextElementSibling.style.display = "block";
+        }
+        return result; // if you give false , after submission the page wont be redirect to next page.. 
+                        // it will be still in the same page
+       }
+
+    </script>
+
+</body>
+</html>
